@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Solar System</title>
+    <script src="script/aframe.min.js"></script>
+
+    <script>
+        // Component to make planets revolve around the sun
+        AFRAME.registerComponent('revolve', {
+            schema: {
+                speed: { type: 'number', default: 1 },
+                radius: { type: 'number', default: 5 },
+                yOffset: { type: 'number', default: 0 }
+            },
+            init: function () {
+                this.angle = Math.random() * 360; // Start at random angle
+            },
+            tick: function (time, delta) {
+                this.angle += this.data.speed * (delta / 1000);
+                const x = Math.cos(this.angle) * this.data.radius;
+                const z = Math.sin(this.angle) * this.data.radius;
+                this.el.setAttribute('position', {
+                    x: x,
+                    y: this.data.yOffset,
+                    z: z
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene background="color: #000010">
+
+        <!-- ===== ASSETS ===== -->
+        <a-assets>
+            <img id="sun" src="texture/2k_sun.jpg" />
+            <img id="mercury" src="texture/2k_mercury.jpg" />
+            <img id="venus" src="texture/2k_venus_surface.jpg" />
+            <img id="earth" src="texture/2k_earth_daymap.jpg" />
+            <img id="moon" src="texture/2k_moon.jpg" />
+            <img id="mars" src="texture/2k_mars.jpg" />
+            <img id="jupiter" src="texture/2k_jupiter.jpg" />
+            <img id="saturn" src="texture/2k_saturn.jpg" />
+            <img id="uranus" src="texture/2k_uranus.jpg" />
+            <img id="neptune" src="texture/2k_neptune.jpg" />
+            <img id="stars"
+                src="texture/2k_stars_milky_way.jpg" />
+        </a-assets>
+
+        <!-- ===== SKY (Stars Background) ===== -->
+        <a-sky color="#000010"></a-sky>
+
+        <!-- ===== SUN (Center) ===== -->
+        <a-sphere id="the-sun" position="0 0 0" radius="2.5" src="#sun"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+            <a-text value="Sun" position="0 3 0" align="center" color="white" scale="2 2 2" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== MERCURY ===== -->
+        <a-sphere radius="0.15" src="#mercury" revolve="speed: 2.5; radius: 4; yOffset: 0">
+            <a-text value="Mercury" position="0 0.4 0" align="center" color="white" scale="0.7 0.7 0.7" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== VENUS ===== -->
+        <a-sphere radius="0.3" src="#venus" revolve="speed: 1.8; radius: 5.5; yOffset: 0">
+            <a-text value="Venus" position="0 0.6 0" align="center" color="white" scale="0.9 0.9 0.9" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== EARTH ===== -->
+        <a-entity id="earth-system" revolve="speed: 1.4; radius: 7; yOffset: 0">
+            <!-- Earth -->
+            <a-sphere radius="0.35" src="#earth" position="0 0 0">
+                <a-text value="Earth" position="0 0.7 0" align="center" color="white" scale="1 1 1" side="double"></a-text>
+            </a-sphere>
+
+            <!-- Moon orbiting Earth -->
+            <a-sphere radius="0.1" src="#moon" revolve="speed: 5; radius: 0.7; yOffset: 0">
+                <a-text value="Moon" position="0 0.3 0" align="center" color="white" scale="0.5 0.5 0.5" side="double"></a-text>
+            </a-sphere>
+        </a-entity>
+
+        <!-- ===== MARS ===== -->
+        <a-sphere radius="0.25" src="#mars" revolve="speed: 1.1; radius: 9; yOffset: 0">
+            <a-text value="Mars" position="0 0.5 0" align="center" color="white" scale="0.8 0.8 0.8" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== JUPITER ===== -->
+        <a-sphere radius="0.9" src="#jupiter" revolve="speed: 0.7; radius: 12; yOffset: 0">
+            <a-text value="Jupiter" position="0 1.3 0" align="center" color="white" scale="1.5 1.5 1.5" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== SATURN + RING ===== -->
+        <a-entity id="saturn-system" revolve="speed: 0.5; radius: 15.5; yOffset: 0">
+            <a-sphere radius="0.75" src="#saturn" position="0 0 0">
+                <a-text value="Saturn" position="0 1.2 0" align="center" color="white" scale="1.3 1.3 1.3" side="double"></a-text>
+            </a-sphere>
+            <!-- Saturn Ring -->
+            <a-torus position="0 0 0" radius="1.1" radius-tubular="0.05" rotation="80 0 0" color="#c2a870"
+                opacity="0.8">
+            </a-torus>
+        </a-entity>
+
+        <!-- ===== URANUS ===== -->
+        <a-sphere radius="0.55" src="#uranus" revolve="speed: 0.35; radius: 18.5; yOffset: 0">
+            <a-text value="Uranus" position="0 0.9 0" align="center" color="white" scale="1.1 1.1 1.1" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== NEPTUNE ===== -->
+        <a-sphere radius="0.5" src="#neptune" revolve="speed: 0.2; radius: 21.5; yOffset: 0">
+            <a-text value="Neptune" position="0 0.8 0" align="center" color="white" scale="1 1 1" side="double"></a-text>
+        </a-sphere>
+
+        <!-- ===== ORBIT RINGS (Visual guides) ===== -->
+        <a-torus radius="4" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="5.5" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="7" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="9" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="12" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="15.5" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="18.5" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+        <a-torus radius="21.5" radius-tubular="0.01" color="white" opacity="0.15" rotation="90 0 0"></a-torus>
+
+        <!-- ===== CAMERA ===== -->
+        <a-entity camera look-controls wasd-controls position="0 10 30">
+        </a-entity>
+
+    </a-scene>
+</body>
+
+</html>
